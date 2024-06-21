@@ -1,0 +1,1 @@
+# Bluraven-KQL-Notes
