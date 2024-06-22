@@ -76,20 +76,20 @@
 | `search in`     | Searches within specified tables or columns.                                  | `search in (DeviceProcessEvents) "mimikatz"`                                  |
 | `search column` | Searches within a specific column.                                            | `search FileName:"lsass"`                                                     |
 | `Where` | Enables precise data filtering based on specified criteria.                                           | `SecurityEvent \ where TimeGenerated > ago(1d) and EventID == 4625 and TargetUserName == "suspicious_user"`                                                     |
-| now()        | Returns the current date and time at query execution. Can include an optional timespan offset to adjust the returned datetime. | ```SecurityEvent \| where TimeGenerated > now(-1h)``` |
-| ago()        | Returns a datetime relative to the current moment in the past. Takes a single timespan value as an argument. | ```SecurityEvent \| where TimeGenerated > ago(1h)``` |
-| union        | Merges the results of two or more tables (or tabular expressions) into a single result set. Optional parameters can modify its behavior. | ```union UserLoginEvents, UserProfiles``` |
-| join         | Merges rows from two tables based on matching values in specified columns (keys). Supports various join types (inner, leftouter, etc.). | ```UserLoginEvents \| join kind=inner UserProfiles on UserId``` |
-| summarize    | Aggregates data based on specified aggregation functions and grouping columns, converting large datasets into concise insights. | ```SecurityEvent \| summarize Count = count(), AvgCpuUsage = avg(CpuUsage) by Computer``` |
+| `now()`        | Returns the current date and time at query execution. Can include an optional timespan offset to adjust the returned datetime. | ```SecurityEvent \| where TimeGenerated > now(-1h)``` |
+| `ago() `       | Returns a datetime relative to the current moment in the past. Takes a single timespan value as an argument. | ```SecurityEvent \| where TimeGenerated > ago(1h)``` |
+| `union `       | Merges the results of two or more tables (or tabular expressions) into a single result set. Optional parameters can modify its behavior. | ```union UserLoginEvents, UserProfiles``` |
+| `join  `       | Merges rows from two tables based on matching values in specified columns (keys). Supports various join types (inner, leftouter, etc.). | ```UserLoginEvents \| join kind=inner UserProfiles on UserId``` |
+| `summarize  `  | Aggregates data based on specified aggregation functions and grouping columns, converting large datasets into concise insights. | ```SecurityEvent \| summarize Count = count(), AvgCpuUsage = avg(CpuUsage) by Computer``` |
 
 <br> <br>
 ## Statistical Aggregation
 | KQL Function | Description | Syntax | Example Query |
 |--------------|-------------|--------|---------------|
-| count()      | Counts the number of rows in the result set or group. Useful for anomaly detection using static thresholds. | `summarize count()` | ```SecurityEvent \| where EventID == 4624 \| summarize count()``` |
-| dcount()     | Estimates the number of distinct (unique) values of an expression per group. It's resource-intensive but provides an approximate count with low error probability. | `summarize dcount(<Expression>, <Accuracy>)` | ```DeviceLogonEvents \| where Timestamp > ago(48h) \| where ActionType == "LogonSuccess" \| summarize unique_computer_count = dcount(DeviceName) by AccountName \| where unique_computer_count > 3``` |
+| `count() `     | Counts the number of rows in the result set or group. Useful for anomaly detection using static thresholds. | `summarize count()` | ```SecurityEvent \| where EventID == 4624 \| summarize count()``` |
+|` dcount() `    | Estimates the number of distinct (unique) values of an expression per group. It's resource-intensive but provides an approximate count with low error probability. | `summarize dcount(<Expression>, <Accuracy>)` | ```DeviceLogonEvents \| where Timestamp > ago(48h) \| where ActionType == "LogonSuccess" \| summarize unique_computer_count = dcount(DeviceName) by AccountName \| where unique_computer_count > 3``` |
 | count_distinct() | Counts the number of distinct (unique) values of an expression per group. Offers accurate results but may be slower for large datasets compared to dcount(). | `summarize count_distinct(<Expression>)` | ```SecurityEvent \| where EventID == 4624 \| summarize count_distinct(TargetUserName)``` |
-| max()        | Returns the maximum value in the result set or group. | `summarize max(<Expression>)` | ```DevicePerformance \| summarize max(CpuUsage)``` |
-| min()        | Returns the minimum value in the result set or group. | `summarize min(<Expression>)` | ```DevicePerformance \| summarize min(MemoryUsage)``` |
-| avg()        | Computes the average (mean) of numeric values in the result set or group. | `summarize avg(<NumericExpression>)` | ```DevicePerformance \| summarize avg(CpuUsage)``` |
-| sum()        | Calculates the sum of numeric values in the result set or group. | `summarize sum(<NumericExpression>)` | ```DevicePerformance \| summarize sum(DiskUsage)``` |
+|` max() `       | Returns the maximum value in the result set or group. | `summarize max(<Expression>)` | ```DevicePerformance \| summarize max(CpuUsage)``` |
+|` min()   `     | Returns the minimum value in the result set or group. | `summarize min(<Expression>)` | ```DevicePerformance \| summarize min(MemoryUsage)``` |
+|` avg()   `     | Computes the average (mean) of numeric values in the result set or group. | `summarize avg(<NumericExpression>)` | ```DevicePerformance \| summarize avg(CpuUsage)``` |
+| `sum()   `     | Calculates the sum of numeric values in the result set or group. | `summarize sum(<NumericExpression>)` | ```DevicePerformance \| summarize sum(DiskUsage)``` |
