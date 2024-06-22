@@ -1,5 +1,5 @@
 # Bluraven-KQL-Notes
-<br> 
+
 
 ## String Operators
 
